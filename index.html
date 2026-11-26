@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>진법 변환 연습기 / 进制转换练习器</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">진법 변환 연습기 <span class="divider">/</span> 进制转换练习器</h1>
+      <p class="app-subtitle">
+        2진수·8진수·10진수·16진수를 한눈에 확인하는 연습 도구
+        <br>
+        一键查看二、八、十、十六进制结果的转换练习工具
+      </p>
+    </header>
+
+    <section class="card converter-card" aria-label="진법 입력 및 변환 / 进制输入与转换">
+      <form id="converter-form" novalidate>
+        <div class="field-group">
+          <span class="field-label" id="base-label">
+            입력 진법 선택 / 选择输入进制
+          </span>
+          <div class="base-selector" role="radiogroup" aria-labelledby="base-label">
+            <label class="base-option">
+              <input type="radio" name="base" value="2">
+              <span class="base-chip">
+                <span class="base-code">2</span>
+                <span class="base-text">2진수 / 二进制</span>
+              </span>
+            </label>
+            <label class="base-option">
+              <input type="radio" name="base" value="8">
+              <span class="base-chip">
+                <span class="base-code">8</span>
+                <span class="base-text">8진수 / 八进制</span>
+              </span>
+            </label>
+            <label class="base-option">
+              <input type="radio" name="base" value="10" checked>
+              <span class="base-chip">
+                <span class="base-code">10</span>
+                <span class="base-text">10진수 / 十进制</span>
+              </span>
+            </label>
+            <label class="base-option">
+              <input type="radio" name="base" value="16">
+              <span class="base-chip">
+                <span class="base-code">16</span>
+                <span class="base-text">16진수 / 十六进制</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="number-input">
+            숫자 입력 (0 이상의 정수) / 输入数字（非负整数）
+          </label>
+          <div class="input-row">
+            <input
+              id="number-input"
+              class="number-input"
+              type="text"
+              inputmode="text"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="예: 164 / 例：164"
+              aria-describedby="input-hint error-message"
+            >
+            <button type="submit" class="btn btn-primary" id="convert-btn">
+              변환 / 转换
+            </button>
+            <button type="button" class="btn btn-secondary" id="clear-btn">
+              초기화 / 清空
+            </button>
+          </div>
+          <p class="input-hint" id="input-hint">
+            10진수에는 0~9 숫자만 입력할 수 있습니다 (예: 164). / 十进制只能输入 0~9 的数字（例：164）。
+          </p>
+        </div>
+
+        <div id="error-message" class="error-box" role="alert" hidden></div>
+      </form>
+    </section>
+
+    <section class="card results-card" aria-labelledby="results-heading">
+      <div class="results-header">
+        <h2 id="results-heading" class="results-title">변환 결과 / 转换结果</h2>
+        <button type="button" class="btn-link" id="sample-btn">
+          예시 적용 (10진수 164) / 填入示例（十进制 164）
+        </button>
+      </div>
+
+      <p id="empty-state" class="empty-state">
+        0 이상의 정수를 입력하고 「변환 / 转换」 버튼을 눌러 주세요.<br>
+        请输入非负整数并点击「변환 / 转换」按钮。
+      </p>
+
+      <div id="results-grid" class="results-grid" hidden>
+        <article class="result-item" data-base="2">
+          <div class="result-top">
+            <div>
+              <h3 class="result-label">2진수 / 二进制</h3>
+              <span class="result-note">오른쪽부터 4자리씩 구분 / 从右向左每4位分组</span>
+            </div>
+            <div class="result-actions">
+              <span class="source-badge" hidden>입력값 / 输入</span>
+              <button type="button" class="copy-btn" data-target="result-2">복사 / 复制</button>
+            </div>
+          </div>
+          <output id="result-2" class="result-value" aria-live="polite"></output>
+        </article>
+
+        <article class="result-item" data-base="8">
+          <div class="result-top">
+            <div>
+              <h3 class="result-label">8진수 / 八进制</h3>
+            </div>
+            <div class="result-actions">
+              <span class="source-badge" hidden>입력값 / 输入</span>
+              <button type="button" class="copy-btn" data-target="result-8">복사 / 复制</button>
+            </div>
+          </div>
+          <output id="result-8" class="result-value" aria-live="polite"></output>
+        </article>
+
+        <article class="result-item" data-base="10">
+          <div class="result-top">
+            <div>
+              <h3 class="result-label">10진수 / 十进制</h3>
+            </div>
+            <div class="result-actions">
+              <span class="source-badge" hidden>입력값 / 输入</span>
+              <button type="button" class="copy-btn" data-target="result-10">복사 / 复制</button>
+            </div>
+          </div>
+          <output id="result-10" class="result-value" aria-live="polite"></output>
+        </article>
+
+        <article class="result-item" data-base="16">
+          <div class="result-top">
+            <div>
+              <h3 class="result-label">16진수 / 十六进制</h3>
+            </div>
+            <div class="result-actions">
+              <span class="source-badge" hidden>입력값 / 输入</span>
+              <button type="button" class="copy-btn" data-target="result-16">복사 / 复制</button>
+            </div>
+          </div>
+          <output id="result-16" class="result-value" aria-live="polite"></output>
+        </article>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      0 이상의 정수 변환 지원 · Enter 키로 바로 변환할 수 있습니다 / 支持任意非负整数转换 · 按 Enter 键即可转换
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
